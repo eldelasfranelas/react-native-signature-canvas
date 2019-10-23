@@ -27,12 +27,12 @@ class SignatureView extends Component {
 
   constructor(props) {
     super(props);
-    const { descriptionText, clearText, confirmText, emptyText, webStyle } = props;
+    const { descriptionText, clearText, confirmText, emptyText, webStyle, penColor } = props;
     this.state = {
       base64DataUrl: props.dataURL || null
     };
 
-    const injectedJavaScript = injectedSignaturePad + injectedApplication;
+    const injectedJavaScript = injectedSignaturePad + injectedApplication({penColor});
     let html = htmlContent(injectedJavaScript);
     html = html.replace('<%style%>', webStyle);
     html = html.replace('<%description%>', descriptionText);
