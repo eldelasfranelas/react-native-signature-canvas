@@ -24,24 +24,24 @@ class SignatureView extends Component {
     clearText: 'Clear',
     confirmText: 'Confirm',
   };
-
+  
   constructor(props) {
     super(props);
-    const { descriptionText, clearText, confirmText, emptyText, webStyle } = props;
+    const { descriptionText, clearText, confirmText, emptyText, webStyle, penColor } = props;
     this.state = {
       base64DataUrl: props.dataURL || null
     };
-
-    const injectedJavaScript = injectedSignaturePad + injectedApplication;
+    
+    const injectedJavaScript = injectedSignaturePad + injectedApplication({penColor});
     let html = htmlContent(injectedJavaScript);
     html = html.replace('<%style%>', webStyle);
     html = html.replace('<%description%>', descriptionText);
     html = html.replace('<%confirm%>', confirmText);
     html = html.replace('<%clear%>', clearText);
-
+    
     this.source = { html };
   };
-
+  
   getSignature = e => {
     const { onOK, onEmpty } = this.props;
     if (e.nativeEvent.data === "EMPTY") {
@@ -50,23 +50,24 @@ class SignatureView extends Component {
       onOK(e.nativeEvent.data);
     }
   };
-
-  _renderError = args => {
-    console.log("error", args);
+  
+  renderError = e => {
+    const { nativeEvent } = e;
+    console.warn('WebView error: ', nativeEvent);
   };
-
+  
   render() {
     return (
       <View style={styles.webBg}>
-        <WebView
-          useWebKit={true}
-          source={this.source}
-          onMessage={this.getSignature}
-          javaScriptEnabled={true}
-          onError={this._renderError}
-        />
-      </View>
-    );
+      <WebView
+    useWebKit={true}
+    source={this.source}
+    onMessage={this.getSignature}
+    javaScriptEnabled={true}
+    onError={this.renderError}
+    />
+    </View>
+  );
   }
 }
 

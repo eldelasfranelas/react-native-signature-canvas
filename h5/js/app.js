@@ -1,4 +1,4 @@
-const content = `
+const content = ({penColor = 'black'}) => `
     var wrapper = document.getElementById("signature-pad"),
         clearButton = wrapper.querySelector("[data-action=clear]"),
         saveButton = wrapper.querySelector("[data-action=save]"),
@@ -22,7 +22,7 @@ const content = `
     resizeCanvas();
     
     signaturePad = new SignaturePad(canvas);
-    
+    signaturePad.penColor = "${penColor}"
     clearButton.addEventListener("click", function (event) {
         signaturePad.clear();
     });
